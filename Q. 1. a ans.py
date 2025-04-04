@@ -12,3 +12,5 @@ if can_form_triangle(side1, side2, side3):
     print("Yes, these three lengths can form a triangle.")
 else:
     print("No, these three lengths cannot form a triangle.")
+    ifelse
+    print("wrong command")
