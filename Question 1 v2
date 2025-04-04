@@ -1,0 +1,93 @@
+def encrypt_char(c, n, m):
+    if 'a' <=c <= 'z':
+        if c<= 'm':
+            shift = n * m
+            return chr(((ord(c) - ord('a') + shift) % 26) +ord('a'))
+        else:
+            shift = n + m
+            return chr(((ord(c) - ord('a') - shift) % 26) + ord('a'))
+    elif 'A' <= c <= 'Z':
+        if c <= 'M':
+            shift = n
+            return chr(((ord(c) - ord('A') - shift) % 26) +ord('A'))
+        else:
+            shift = m ** 2
+            return chr(((ord(c) - ord('A') + shift) % 26) + ord('A'))
+    else:
+        return c
+
+def get_decrypt_options(c, n, m):    
+    if 'a' <= c <= 'z':
+        option1 = chr(((ord(c) - ord('a') - (n * m)) % 26) + ord('a'))
+        option2 = chr(((ord(c) - ord('a') + (n + m)) % 26) + ord('a'))
+        return [option1, option2]
+    elif 'A' <= c <= 'Z':
+        option1 = chr(((ord(c) - ord('A') + n) % 26) + ord('A'))
+        option2 = chr(((ord(c) - ord('A') - (m ** 2)) % 26) + ord('A'))
+        return [option1, option2]
+    else:
+        return [c]
+    
+def backtrack_decrypt(encrypted, n, m, index=0, candidate=""):
+    if index == len(encrypted):
+        if encrypt_text(candidate, n, m)== encrypted:
+            return candidate
+        else:
+            return None
+        
+    options = get_decrypt_options(encrypted[index], n, m)
+    for opt in options:
+        result = backtrack_decrypt(encrypted, n, m, index + 1, candidate + opt)
+        if result is not None:
+            return result
+    return None
+
+def decrypt_text(text, n, m):
+    return backtrack_decrypt(text, n, m)
+
+def check_correctness(original, decrypted):
+    return original == decrypted
+
+def encrypt_text(text, n, m):
+    return ''.join(encrypt_char(c, n, m) for c in text)
+
+def main():
+    mode = input("Press 'e to encrypt or 'd' to decrypt").lower()
+    n = int(input("Enter value for n: "))
+    m = int(input("Enter value for m: "))
+
+    if mode == 'e':
+        with open("raw_text.txt", "r") as f:
+            original_text = f.read()
+        encrypted = encrypt_text(original_text, n, m)
+        with open("encrypted_text.txt", "w") as f:
+            f.write(encrypted)
+        print("Encryption completed.")
+        decrypted = decrypt_text(encrypted, n, m)
+        if check_correctness(original_text, decrypted):
+            print("Encryption and Decryption match.")
+        else:
+            print("Something went wrong with the decryption")
+    
+    elif mode == 'd':
+        with open("encrypted_text.txt", "r") as f:
+            encrypted = f.read()
+        decrypted = decrypt_text(encrypted, n, m)
+        with open("decrypted_text.txt", "w") as f:
+            f.write(decrypted)
+        print("decryption finished.")
+        try:
+            with open("raw_text.txt", "r") as f:
+                original_text = f.read()
+            if check_correctness(original_text, decrypted):
+                print("Decrypted text correct")
+            else:
+                print("Decrypted text does not match original")
+        except FileNotFoundError:
+            print("Skipping correctness check.")
+
+    else:
+        print("invalid input, Press 'e or 'd'.")
+
+if __name__ == "__main__":
+    main()

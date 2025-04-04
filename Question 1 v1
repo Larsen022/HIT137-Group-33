@@ -1,0 +1,160 @@
+def encrypt_char(c, n, m):
+    if 'a' <= c <= 'z': # Lower case from a to z
+        if c <= 'm': # First half of aplhabet
+            shift = n * m 
+            return chr(((ord(c) - ord('a') + shift) % 26) + ord('a'))
+        else: # second half
+            shift = n + m
+            return chr(((ord(c) - ord('a') - shift) % 26) + ord('a'))
+        
+    elif 'A' <= c <= 'Z': # same but for upper case
+        if c <= 'M':
+            shift = n
+            return chr(((ord(c) - ord('A') - shift) % 26) + ord('A'))
+        else:
+            shift = m ** 2
+            return chr(((ord(c) - ord('A') + shift) % 26) + ord('A'))
+        
+    else:
+        return c # Leaves special characters, and numbers remain unchanged.
+
+def decrypt_char(c, n, m):
+    if 'a' <=c <='z':
+        shift_forward = n * m
+        shift_backward = n + m
+        a = chr(((ord(c) - ord('a') - shift_forward) % 26) + ord('a'))
+        b = chr(((ord(c) - ord('a') + shift_backward) % 26) + ord('a'))
+        if a <= 'm':
+            return a
+        else:
+            return b
+        
+    elif 'A' <= c <= 'Z':
+        shift_backward = n
+        shift_forward = m ** 2
+        a = chr(((ord(c) - ord('A') + shift_backward) % 26) + ord('A'))
+        b = chr(((ord(c) - ord('A') - shift_forward) % 26) + ord('A'))
+        if a <= 'M':
+            return a
+        else:
+            return b
+        
+    else:
+        return c
+      
+def encrypt_text(text, n, m):
+    return ''.join(encrypt_char(c, n, m) for c in text) # this should encrypt the whole string applying the rules above
+
+def decrypt_text(text, n, m):
+    return ''.join(decrypt_char(c, n, m) for c in text) #vice/versa
+
+def check_correctness(original, decrypted):
+    return original == decrypted #Check output matches input
+
+
+def main():
+    mode = input("Press 'e' to Encrypt, or 'd' to Decrypt: ").lower()
+
+    n = int(input("Enter value for n: ")) #Should we change this from n, m from a user perspective? Should we add an explination of what is happening for the user?
+    m = int(input("Enter value for m: "))
+
+    if mode == 'e':
+        with open("raw_text.txt", "r") as f:
+            original_text = f.read()
+        
+        encrypted = encrypt_text(original_text, n, m)
+
+        with open("encrypted_text.txt", "w") as f:
+            f.write(encrypted)
+
+        print("Encryption complete, file saved as 'encrypted_text.txt'.")
+
+        decrypted = decrypt_text(encrypted, n, m)
+        if check_correctness(original_text, decrypted):
+            print("Encryption and decryption match")
+        else:
+            print("Something went wrong")
+
+    elif mode == 'd': # This should handle the just decryption mode
+        with open("encrypted_text.txt", "r") as f:
+            encrypted = f.read()
+
+        decrypted = decrypt_text(encrypted, n, m)
+
+        with open("decrypted_text.txt", "w") as f:
+            f.write(decrypted)
+
+        print("Decryption finished, file saved as 'decrypted_output.txt'.")
+
+        try:
+            with open("raw_text.txt", "r") as f:
+                original_text = f.read()
+
+            if check_correctness(original_text, decrypted):
+                print("Decrypted text matches original.")
+            else:
+                print("Decrypted text does not match original.")
+        except FileNotFoundError:
+            print("Original file not found. Skipping correctness check.")
+
+    else:
+        print("invalid input. Please type 'e' or 'd'.")
+
+if __name__ == "__main__":
+    main()
+
+    #Need to add a file select to make it work better, not sure if its something we will go over in class
+    #Need to fix incorrect inputs
+    #Something wrong, will revise over coming week
+    #No one help me, I shall suffer and learn. Trial by fire
+    #Need to add all my notes to this as well
+
+    """def decrypt_char(c, n, m): #fuck u stupid fucking thinking rock. Better but still not right
+    if 'a' <= c <= 'z':
+        shift_forward = n * m
+        shift_backward = n + m
+        pos = ord(c) - ord('a')
+
+        possible_a_m = (pos - shift_forward) % 26
+        possible_n_z = (pos + shift_forward) % 26
+
+        if possible_a_m <= 12:
+            return chr(possible_a_m + ord('a'))
+        else:
+            return chr(possible_n_z + ord('a'))
+        
+    elif 'A' <= c <= 'Z':
+        shift_backward = n
+        shift_forward = m ** 2
+        pos = ord(c) - ord('A')
+
+        possible_a_m = (pos + shift_backward) % 26
+        possible_n_z = (pos - shift_forward) % 26
+
+        if possible_a_m <= 12:
+            return chr(possible_a_m + ord('A'))
+        else:
+            return chr(possible_n_z + ord('A'))
+        
+    else:
+        return c"""
+
+"""def decrypt_char(c, n, m): #This needs work
+    if 'a' <= c <= 'z':
+        if ((ord(c) - ord('a')) < 13):
+            shift = n * m
+            return chr(((ord(c) - ord('a') - shift) % 26) + ord('a'))
+        else:
+            shift = n + m
+            return chr(((ord(c) - ord('a') + shift) % 26) + ord('a'))
+        
+    elif 'A' <= c <= 'Z':
+        if c <= 'M':
+            shift = n
+            return chr(((ord(c) - ord('A') + shift) % 26) + ord('A'))
+        else:
+            shift = m ** 2
+            return chr(((ord(c) - ord('A') - shift) % 26) + ord('A'))
+        
+    else:
+        return c    """   
