@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 Summer: 32.10
 Autumn: 27.32
 Winter: 21.07
 Spring: 27.43
-=======
-Summer: 32.14degree celcius
-Autumn: 27.36degree celcius
-Winter: 21.15degree celcius
-Spring: 27.53degree celcius
->>>>>>> 8e04000bbba4d2468e52dfd52095271bd100dd64
