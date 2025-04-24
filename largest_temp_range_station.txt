@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 Largest Temperature Range: 24.45
 Stations:
 BOURKE-AIRPORT-AWS
+=======
+largest temperature range: 20.58 degree celcius
+stations(s) with the largest range:
+- WYALONG-POST-OFFICE
+>>>>>>> 8e04000bbba4d2468e52dfd52095271bd100dd64
