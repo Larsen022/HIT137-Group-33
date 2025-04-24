@@ -1,0 +1,3 @@
+Largest Temperature Range: 24.45
+Stations:
+BOURKE-AIRPORT-AWS
