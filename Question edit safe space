@@ -1,0 +1,46 @@
+    mode = input("Press 'e' to encrypt or 'd' to decrypt: ").lower()
+
+    if mode == 'e':
+        n = int(input("Enter value for n: "))
+        m = int(input("Enter value for m: "))
+    
+        with open("raw_text.txt", "r") as f:
+            original_text = f.read()
+        encrypted = encrypt_text(original_text, n, m)
+        with open("encrypted_text.txt", "w") as f:
+            f.write(encrypted)
+        print("Encryption complete.")
+
+        decrypted = decrypt_text(encrypted, n, m)
+        if check_correctness(original_text, decrypted):
+            print("Encryption and Decryption Match.")
+        else:
+            print("Something went wrong.")
+
+    elif mode == 'd':
+        n = int(input("Enter value for n: "))
+        m = int(input("Enter value for m: "))
+
+        with open ("encrypted_text.txt", "r") as f:
+            encrypted = f.read()
+        decrypted = decrypt_text(encrypted, n, m)
+        with open("decrypted_text.txt", "w") as f:
+            f.write(decrypted)
+        print("Decryption finished.")
+        
+        try:
+            with open("raw_text.txt", "r") as f:
+                original_text = f.read()
+            if check_correctness(original_text, decrypted):
+                print("Decrypted text matches original")
+            else:
+                print("Decrypted Text does not match original.")
+        except FileNotFoundError:
+            print("Original File not found, skipping check.")
+    else:
+        print("Invalid input.")
+
+if __name__ == "__main__":
+    main()
+
+#This now works, will add notes soon
