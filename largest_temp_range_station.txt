@@ -1,0 +1,3 @@
+largest temperature range: 20.58 degree celcius
+stations(s) with the largest range:
+- WYALONG-POST-OFFICE
